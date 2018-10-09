@@ -1,4 +1,4 @@
-# Opal REDCap Plugin [![Build Status](https://travis-ci.org/obiba/opal-analysis-validate.svg?branch=master)](https://travis-ci.org/obiba/opal-analysis-validate)
+# Opal Validate Plugin [![Build Status](https://travis-ci.org/obiba/opal-analysis-validate.svg?branch=master)](https://travis-ci.org/obiba/opal-analysis-validate)
 
 This plugin can validate data of a table using the [validate](https://cran.r-project.org/package=validate) R package.
 
