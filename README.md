@@ -1,4 +1,4 @@
-# Opal Validate Plugin [![Build Status](https://travis-ci.org/obiba/opal-analysis-validate.svg?branch=master)](https://travis-ci.org/obiba/opal-analysis-validate)
+# Opal Validate Plugin [![Build Status](https://travis-ci.com/obiba/opal-analysis-validate.svg?branch=master)](https://travis-ci.com/obiba/opal-analysis-validate)
 
 This plugin can validate data of a table using the [validate](https://cran.r-project.org/package=validate) R package.
 
@@ -11,7 +11,7 @@ This configuration file is meant to provide default values for Validate plugin. 
 [Opal](https://github.com/obiba/opal) is OBiBa’s core database application for biobanks or epidemiological studies.
 
 * Have a bug or a question? Please create an issue on [GitHub](https://github.com/obiba/opal-analysis-validate/issues).
-* Continuous integration is on [Travis](https://travis-ci.org/obiba/opal-analysis-validate).
+* Continuous integration is on [Travis](https://travis-ci.com/obiba/opal-analysis-validate).
 
 ## Mailing list
 
