@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Validate",
+  "description": "The validate package is intended to make checking your date easy, maintainable and reproducible.",
+  "type": "array",
+  "items": [
+    {
+      "key": "validation_expressions",
+      "title": "Validation expression",
+      "type": "string",
+      "format": "textarea"
+    }
+  ],
+  "required": [
+    "validation_expressions"
+  ]
+}
