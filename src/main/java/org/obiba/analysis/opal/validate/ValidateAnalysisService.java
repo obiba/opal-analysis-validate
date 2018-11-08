@@ -1,9 +1,11 @@
 package org.obiba.analysis.opal.validate;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -12,13 +14,17 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import org.json.JSONObject;
+import org.obiba.opal.spi.analysis.AbstractAnalysisService;
 import org.obiba.opal.spi.analysis.AnalysisTemplate;
 import org.obiba.opal.spi.analysis.NoSuchAnalysisTemplateException;
 import org.obiba.opal.spi.r.AbstractROperation;
+import org.obiba.opal.spi.r.FileWriteROperation;
 import org.obiba.opal.spi.r.analysis.AbstractRAnalysisService;
 import org.obiba.opal.spi.r.analysis.RAnalysis;
 import org.obiba.opal.spi.r.analysis.RAnalysisResult;
 import org.obiba.opal.spi.r.analysis.RAnalysisResult.Builder;
+import org.rosuda.REngine.REXP;
+import org.rosuda.REngine.REXPMismatchException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,23 +50,42 @@ public class ValidateAnalysisService extends AbstractRAnalysisService {
 
   @Override
   public List<RAnalysisResult> analyse(List<RAnalysis> analyses) throws NoSuchAnalysisTemplateException {
-    return analyses.stream().map(a -> {
-      Builder analysisResultBuilder = RAnalysisResult.create(a);
-      getTemplate(a.getTemplateName()); // TODO: template has paths to routine and report files
+    return analyses.stream().map(analysis -> {
+      Builder analysisResultBuilder = RAnalysisResult.create(analysis);
 
-      // TODO: prepare files
-
-      a.getSession().execute(new AbstractROperation() {
-
-        @Override
-        protected void doWithConnection() {
-          // TODO: do something
-        }
-
-      });
+      analysisResultBuilder.start();
+      prepare(analysis);
+      run(analysis);
+      analysisResultBuilder.end();
 
       return analysisResultBuilder.build();
     }).collect(Collectors.toList());
+  }
+
+  private void run(RAnalysis analysis) {
+    analysis.getSession().execute(new AbstractROperation() {
+
+      @Override
+      protected void doWithConnection() {
+        ensurePackage("validate");
+        eval("library(validate)");
+        REXP eval = eval(String.format("summary(check_that(%s, SUKUP > 1))", analysis.getSymbol()), false);
+        try {
+          HashMap result = (HashMap) eval.asNativeJavaObject();
+          result.forEach((k, v) ->  log.info("######  {} - {}", k, v));
+        } catch (REXPMismatchException e) {
+          e.printStackTrace();
+        }
+      }
+
+    });
+  }
+
+  private void prepare(RAnalysis analysis) {
+    ValidateAnalysisTemplate template = (ValidateAnalysisTemplate) getTemplate(analysis.getTemplateName());
+    File file = template.getRoutinePath().toFile();
+    FileWriteROperation rop = new FileWriteROperation(file.getName(), file);
+    analysis.getSession().execute(rop);
   }
 
   @Override
