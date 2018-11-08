@@ -12,17 +12,17 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import org.json.JSONObject;
-import org.obiba.opal.spi.analysis.AbstractAnalysisService;
 import org.obiba.opal.spi.analysis.AnalysisTemplate;
 import org.obiba.opal.spi.analysis.NoSuchAnalysisTemplateException;
 import org.obiba.opal.spi.r.AbstractROperation;
+import org.obiba.opal.spi.r.analysis.AbstractRAnalysisService;
 import org.obiba.opal.spi.r.analysis.RAnalysis;
 import org.obiba.opal.spi.r.analysis.RAnalysisResult;
 import org.obiba.opal.spi.r.analysis.RAnalysisResult.Builder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ValidateAnalysisService extends AbstractAnalysisService<RAnalysis, RAnalysisResult> {
+public class ValidateAnalysisService extends AbstractRAnalysisService {
 
   private static final String TEMPLATES_DIR = "templates";
   private static final String SCHEMA_FORM_FILE_NAME = "form.json";
