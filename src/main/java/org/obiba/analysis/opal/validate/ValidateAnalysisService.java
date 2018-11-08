@@ -1,17 +1,5 @@
 package org.obiba.analysis.opal.validate;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-
-import org.json.JSONObject;
-import org.obiba.opal.spi.analysis.AnalysisTemplate;
-import org.obiba.opal.spi.analysis.NoSuchAnalysisTemplateException;
-import org.obiba.opal.spi.r.analysis.RAnalysis;
-import org.obiba.opal.spi.r.analysis.RAnalysisResult;
-import org.obiba.opal.spi.r.analysis.RAnalysisService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,7 +8,21 @@ import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-public class ValidateAnalysisService implements RAnalysisService {
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+
+import org.json.JSONObject;
+import org.obiba.opal.spi.analysis.AbstractAnalysisService;
+import org.obiba.opal.spi.analysis.AnalysisTemplate;
+import org.obiba.opal.spi.analysis.NoSuchAnalysisTemplateException;
+import org.obiba.opal.spi.r.AbstractROperation;
+import org.obiba.opal.spi.r.analysis.RAnalysis;
+import org.obiba.opal.spi.r.analysis.RAnalysisResult;
+import org.obiba.opal.spi.r.analysis.RAnalysisResult.Builder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class ValidateAnalysisService extends AbstractAnalysisService<RAnalysis, RAnalysisResult> {
 
   private static final String TEMPLATES_DIR = "templates";
   private static final String SCHEMA_FORM_FILE_NAME = "form.json";
@@ -42,7 +44,23 @@ public class ValidateAnalysisService implements RAnalysisService {
 
   @Override
   public List<RAnalysisResult> analyse(List<RAnalysis> analyses) throws NoSuchAnalysisTemplateException {
-    return analyses.stream().map(a -> RAnalysisResult.create(a).build()).collect(Collectors.toList());
+    return analyses.stream().map(a -> {
+      Builder analysisResultBuilder = RAnalysisResult.create(a);
+      getTemplate(a.getTemplateName()); // TODO: template has paths to routine and report files
+
+      // TODO: prepare files
+
+      a.getSession().execute(new AbstractROperation() {
+
+        @Override
+        protected void doWithConnection() {
+          // TODO: do something
+        }
+
+      });
+
+      return analysisResultBuilder.build();
+    }).collect(Collectors.toList());
   }
 
   @Override
@@ -86,8 +104,8 @@ public class ValidateAnalysisService implements RAnalysisService {
           ValidateAnalysisTemplate validateAnalysisTemplate = new ValidateAnalysisTemplate(p.getFileName().toString());
 
           Path schemaFormPath = Paths.get(p.toString(), SCHEMA_FORM_FILE_NAME);
-          Path routinePath = Paths.get(p.toString(), ROUTINE_FILE_NAME); // TODO: do something with this
-          Path reportPath = Paths.get(p.toString(), REPORT_FILE_NAME); // TODO: do something with this
+          validateAnalysisTemplate.setRoutinePath(Paths.get(p.toString(), ROUTINE_FILE_NAME));
+          validateAnalysisTemplate.setReportPath(Paths.get(p.toString(), REPORT_FILE_NAME));
 
           if (Files.isRegularFile(schemaFormPath)) {
             try {
@@ -109,5 +127,9 @@ public class ValidateAnalysisService implements RAnalysisService {
     }
 
     return Lists.newArrayList();
+  }
+
+  private AnalysisTemplate getTemplate(String name) throws NoSuchAnalysisTemplateException {
+    return getAnalysisTemplates().stream().filter(t -> name.equals(t.getName())).findFirst().orElseThrow(() -> new NoSuchAnalysisTemplateException(name));
   }
 }

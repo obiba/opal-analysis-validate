@@ -1,5 +1,6 @@
 package org.obiba.analysis.opal.validate;
 
+import java.nio.file.Path;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -13,6 +14,9 @@ public class ValidateAnalysisTemplate implements AnalysisTemplate {
   private String description;
   private JSONObject schemaForm;
   private List<ValueType> valueTypes;
+
+  private Path routinePath;
+  private Path reportPath;
 
   public ValidateAnalysisTemplate(String name) {
     this.name = name;
@@ -76,6 +80,34 @@ public class ValidateAnalysisTemplate implements AnalysisTemplate {
 	@Override
 	public List<ValueType> getValueTypes() {
 		return valueTypes;
-	}
+  }
+
+  /**
+   * @return the reportPath
+   */
+  public Path getReportPath() {
+    return reportPath;
+  }
+
+  /**
+   * @param reportPath the reportPath to set
+   */
+  public void setReportPath(Path reportPath) {
+    this.reportPath = reportPath;
+  }
+
+  /**
+   * @return the routinePath
+   */
+  public Path getRoutinePath() {
+    return routinePath;
+  }
+
+  /**
+   * @param routinePath the routinePath to set
+   */
+  public void setRoutinePath(Path routinePath) {
+    this.routinePath = routinePath;
+  }
 
 }
