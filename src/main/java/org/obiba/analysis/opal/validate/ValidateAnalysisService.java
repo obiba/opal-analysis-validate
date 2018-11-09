@@ -60,13 +60,17 @@ public class ValidateAnalysisService extends AbstractRAnalysisService {
         analysisResultBuilder.message("No analysis to run.");
       } else {
         prepare(analysis.getSession(), template);
+        REXP runResult = run(analysis);
 
         try {
-          HashMap result = (HashMap) run(analysis).asNativeJavaObject();
+          HashMap result = (HashMap) runResult.asNativeJavaObject();
           result.forEach((k, v) ->  log.info("######  {} - {}", v, k));
         } catch (REXPMismatchException e) {
-          e.printStackTrace();
+          log.error("{}", e);
         }
+
+        analysisResultBuilder.status(AnalysisStatus.PASSED.name());
+        analysisResultBuilder.message(String.format("%s", runResult));
       }
 
       analysisResultBuilder.end();
