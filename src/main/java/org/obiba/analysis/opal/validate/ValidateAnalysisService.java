@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -69,8 +70,8 @@ public class ValidateAnalysisService extends AbstractRAnalysisService {
         eval("library(validate)");
         REXP eval = eval(String.format("summary(check_that(%s, SUKUP > 1))", analysis.getSymbol()), false);
         try {
-          JSONObject obj = new JSONObject(eval.asNativeJavaObject());
-          obj.keys().forEachRemaining(k -> log.info("######  {} - {}", k, obj.opt(k)));
+          HashMap result = (HashMap) eval.asNativeJavaObject();
+          result.forEach((k, v) ->  log.info("######  {} - {}", v, k));
         } catch (REXPMismatchException e) {
           e.printStackTrace();
         }
