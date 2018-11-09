@@ -1,6 +1,8 @@
 package org.obiba.analysis.opal.validate;
 
+import org.json.JSONObject;
 import org.obiba.opal.spi.r.AbstractROperationWithResult;
+import org.obiba.opal.spi.r.RUtils;
 import org.obiba.opal.spi.r.analysis.RAnalysis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +22,7 @@ public class ValidateAnalysisROperation extends AbstractROperationWithResult {
     log.debug("Executing analysis for {}", analysis);
     ensurePackage("validate");
     eval("library(validate)");
-    setResult(eval(String.format("summary(check_that(%s, SUKUP > 1))", analysis.getSymbol()), false));
+    setResult(eval(String.format("summary(check_that(%s, SUKUP > 1))", RUtils.getSymbol(analysis.getSymbol())), false));
   }
 
 }
