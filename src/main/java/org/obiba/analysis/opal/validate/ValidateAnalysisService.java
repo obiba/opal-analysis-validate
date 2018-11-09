@@ -6,6 +6,12 @@ import org.rosuda.REngine.REXP;
 
 public class ValidateAnalysisService extends AbstractRAnalysisService {
 
+
+  @Override
+  public String getName() {
+    return "opal-analysis-validate";
+  }
+
   @Override
   protected REXP run(RAnalysis analysis) {
     ValidateAnalysisROperation validateAnalysisROperation = new ValidateAnalysisROperation(analysis);
