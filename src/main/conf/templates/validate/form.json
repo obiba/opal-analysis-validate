@@ -7,8 +7,11 @@
     {
       "key": "validation_expressions",
       "title": "Validation expression",
-      "type": "string",
-      "format": "textarea"
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
     }
   ],
   "required": [

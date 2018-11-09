@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -14,7 +13,6 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import org.json.JSONObject;
-import org.obiba.opal.spi.analysis.AbstractAnalysisService;
 import org.obiba.opal.spi.analysis.AnalysisTemplate;
 import org.obiba.opal.spi.analysis.NoSuchAnalysisTemplateException;
 import org.obiba.opal.spi.r.AbstractROperation;
@@ -71,8 +69,8 @@ public class ValidateAnalysisService extends AbstractRAnalysisService {
         eval("library(validate)");
         REXP eval = eval(String.format("summary(check_that(%s, SUKUP > 1))", analysis.getSymbol()), false);
         try {
-          HashMap result = (HashMap) eval.asNativeJavaObject();
-          result.forEach((k, v) ->  log.info("######  {} - {}", k, v));
+          JSONObject obj = new JSONObject(eval.asNativeJavaObject());
+          obj.keys().forEachRemaining(k -> log.info("######  {} - {}", k, obj.opt(k)));
         } catch (REXPMismatchException e) {
           e.printStackTrace();
         }
@@ -135,7 +133,8 @@ public class ValidateAnalysisService extends AbstractRAnalysisService {
           if (Files.isRegularFile(schemaFormPath)) {
             try {
               String schemaForm = Files.lines(schemaFormPath).reduce("", String::concat).trim();
-              validateAnalysisTemplate.setSchemaForm(new JSONObject(Strings.isNullOrEmpty(schemaForm) ? "{}" : schemaForm));
+              validateAnalysisTemplate
+                  .setSchemaForm(new JSONObject(Strings.isNullOrEmpty(schemaForm) ? "{}" : schemaForm));
 
               validateAnalysisTemplate.setTitle(validateAnalysisTemplate.getJSONSchemaForm().optString("title"));
               validateAnalysisTemplate.setTitle(validateAnalysisTemplate.getJSONSchemaForm().optString("description"));
@@ -155,6 +154,7 @@ public class ValidateAnalysisService extends AbstractRAnalysisService {
   }
 
   private AnalysisTemplate getTemplate(String name) throws NoSuchAnalysisTemplateException {
-    return getAnalysisTemplates().stream().filter(t -> name.equals(t.getName())).findFirst().orElseThrow(() -> new NoSuchAnalysisTemplateException(name));
+    return getAnalysisTemplates().stream().filter(t -> name.equals(t.getName())).findFirst()
+        .orElseThrow(() -> new NoSuchAnalysisTemplateException(name));
   }
 }
