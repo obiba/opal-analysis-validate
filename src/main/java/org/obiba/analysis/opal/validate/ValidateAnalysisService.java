@@ -55,7 +55,7 @@ public class ValidateAnalysisService extends AbstractRAnalysisService {
       ValidateAnalysisTemplate template = (ValidateAnalysisTemplate) getTemplate(analysis.getTemplateName());
 
       analysisResultBuilder.start();
-      if (Files.isRegularFile(template.getRoutinePath()) && Files.isRegularFile(template.getReportPath())) {
+      if (!Files.isRegularFile(template.getRoutinePath()) && !Files.isRegularFile(template.getReportPath())) {
         analysisResultBuilder.status(AnalysisStatus.IGNORED.name());
         analysisResultBuilder.message("No analysis to run.");
       } else {

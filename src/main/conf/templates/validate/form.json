@@ -5,7 +5,7 @@
   "type": "array",
   "items": [
     {
-      "key": "validation_expressions",
+      "key": "expressions",
       "title": "Validation expression",
       "type": "array",
       "items": {
@@ -15,6 +15,6 @@
     }
   ],
   "required": [
-    "validation_expressions"
+    "expressions"
   ]
 }
