@@ -5,6 +5,15 @@ output:
 ---
 
 ``` {r echo=FALSE}
-source("Test.R")
+source("routine.R")
+```
+
+# Summary
+``` {r echo=FALSE}
+summaryResult
+```
+
+# Result
+``` {r echo= FALSE}
 result
 ```

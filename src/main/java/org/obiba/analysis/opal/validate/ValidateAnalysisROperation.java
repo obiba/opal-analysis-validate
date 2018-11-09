@@ -1,13 +1,12 @@
 package org.obiba.analysis.opal.validate;
 
-import java.util.stream.Collectors;
-
 import org.json.JSONObject;
 import org.obiba.opal.spi.r.AbstractROperationWithResult;
-import org.obiba.opal.spi.r.RUtils;
 import org.obiba.opal.spi.r.analysis.RAnalysis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.stream.Collectors;
 
 public class ValidateAnalysisROperation extends AbstractROperationWithResult {
 
@@ -23,11 +22,13 @@ public class ValidateAnalysisROperation extends AbstractROperationWithResult {
   protected void doWithConnection() {
     ensurePackage("validate");
     eval("library(validate)");
+    eval(String.format("base::assign(\"data\", %s)", analysis.getSymbol()), false);
     eval(String.format("base::assign(\"payload\", %s)", parametersToRListStringRepresentation(analysis.getParameters())), false);
+    eval("rmarkdown::render('report.Rmd', \"html_document\")");
 
     log.debug("Executing analysis for {}", analysis);
 
-    setResult(eval(String.format("summary(check_that(%s, SUKUP > 1))", RUtils.getSymbol(analysis.getSymbol())), false));
+    setResult(eval("result", false));
   }
 
   private String parametersToRListStringRepresentation(JSONObject parameters) {
