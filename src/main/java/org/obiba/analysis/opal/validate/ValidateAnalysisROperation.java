@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.stream.Collectors;
 
+import com.google.common.base.Strings;
+
 public class ValidateAnalysisROperation extends AbstractROperationWithResult {
 
   private static final Logger log = LoggerFactory.getLogger(ValidateAnalysisROperation.class);
@@ -32,7 +34,14 @@ public class ValidateAnalysisROperation extends AbstractROperationWithResult {
   }
 
   private String parametersToRListStringRepresentation(JSONObject parameters) {
-    return String.format("list(%s)", parameters.keySet().stream().map(key -> String.format("%s=%s", key, parameters.optString(key))).collect(Collectors.joining(",")));
+    return String.format("list(%s)",
+        parameters.keySet().stream()
+            .map(key -> String.format("%s=%s", key, removeBracesForArrayString(parameters.optString(key))))
+            .collect(Collectors.joining(",")));
+  }
+
+  private String removeBracesForArrayString(String arrayString) {
+    return Strings.isNullOrEmpty(arrayString) ? "\"\"" : arrayString.replaceAll("^\\[|\\]$", "");
   }
 
 }

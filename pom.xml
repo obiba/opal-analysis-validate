@@ -43,7 +43,7 @@
       <artifactId>opal-spi-r</artifactId>
       <version>${opal.version}</version>
     </dependency>
-    
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
