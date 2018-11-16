@@ -1,6 +1,7 @@
 package org.obiba.analysis.opal.validate;
 
 import org.json.JSONObject;
+import org.obiba.opal.spi.analysis.AnalysisReportType;
 import org.obiba.opal.spi.r.AbstractROperationWithResult;
 import org.obiba.opal.spi.r.analysis.RAnalysis;
 import org.slf4j.Logger;
@@ -24,13 +25,18 @@ public class ValidateAnalysisROperation extends AbstractROperationWithResult {
   protected void doWithConnection() {
     ensurePackage("validate");
     eval("library(validate)");
+    JSONObject parameters = analysis.getParameters();
     eval(String.format("base::assign(\"data\", %s)", analysis.getSymbol()), false);
-    eval(String.format("base::assign(\"payload\", %s)", parametersToRListStringRepresentation(analysis.getParameters())), false);
-    eval("rmarkdown::render('report.Rmd', \"html_document\")");
+    eval(String.format("base::assign(\"payload\", %s)", parametersToRListStringRepresentation(parameters)), false);
+    eval(String.format("rmarkdown::render('report.Rmd', \"%s\")", getReportTypeFromParameters(parameters)));
 
     log.debug("Executing analysis for {}", analysis);
 
     setResult(eval("result", false));
+  }
+
+  private String getReportTypeFromParameters(JSONObject parameters) {
+    return AnalysisReportType.safeValueOf((String)parameters.get("reportType")).getOutput();
   }
 
   private String parametersToRListStringRepresentation(JSONObject parameters) {
