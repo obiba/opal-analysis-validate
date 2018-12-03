@@ -36,7 +36,8 @@ public class ValidateAnalysisROperation extends AbstractROperationWithResult {
   }
 
   private String getReportTypeFromParameters(JSONObject parameters) {
-    return AnalysisReportType.safeValueOf(parameters.optString("reportType")).getOutput();
+    String reportType = parameters.optString("reportType");
+    return Strings.isNullOrEmpty(reportType) ? AnalysisReportType.HTML.getOutput() : AnalysisReportType.safeValueOf(reportType).getOutput();
   }
 
   private String parametersToRListStringRepresentation(JSONObject parameters) {
