@@ -11,7 +11,7 @@ c <- confront(data, v)
 summaryResult <- summary(c)
 
 if(sum(summaryResult$fails) > 0) {
-  result <- list('status' = 'FAILURE', 'message' = sprintf("Validation test %s failed!", rulesValues))
+  result <- list('status' = 'FAILED', 'message' = sprintf("Validation test %s failed!", rulesValues))
 } else {
   result <- list('status' = 'PASSED',  'message' = sprintf("Validation test %s passed!", rulesValues))
 }
