@@ -1,17 +1,75 @@
-#
-# Retrieve script parameters and transform to validation rules
-#
-rulesValues <- payload$expressions
-rules <- unlist(strsplit(rulesValues, split=','))
+library(validate)
+library(rlang)
+library(jsonlite)
 
+getStatusName <- function(status) {
+  if (status) 'PASSED' else 'FAILED'
+}
 
-df <- data.frame(rule=rules)
-v <- validator(.data=df)
-c <- confront(data, v)
-summaryResult <- summary(c)
+parseExpressions <- function(payload) {
+  # Parses the payload to extract validation rule expressions
+  #
+  # Args:
+  #   payload
+  #
+  # Returns:
+  #   Array of rules
 
-if(sum(summaryResult$fails) > 0) {
-  result <- list('status' = 'FAILED', 'message' = sprintf("Validation test %s failed!", rulesValues))
+  if (!is.null(payload) & !is.null(payload$expressions)) {
+    rules <- payload$expressions
+  }
+}
+
+generateSummary <- function(rules, data) {
+  # Generates the summary using input rules
+  #
+  # Args:
+  #   rules: array of rule expressions
+  #   data: data to be validated
+  # Returns:
+  #   Summary
+
+  df <- data.frame(rule=rules)
+  v <- validator(.data=df)
+  c <- confront(data, v)
+  list("summary" = summary(c), "confront" = c)
+}
+
+processSummary <- function(summaryList) {
+  # Iterates through confront summary and build a result of list
+  #
+  # Args:
+  #   summaryResult
+  #
+  # Returns:
+  #   Result object
+
+  result <- list()
+  items <- list()
+  allPassed = TRUE
+
+  for(summaryItem in 1:nrow(summaryList)) {
+    passed = summaryList[summaryItem, "fails"] < 1
+    allPassed = allPassed & passed
+    item <- list('status' = getStatusName(passed), 'message' = summaryList[summaryItem, "expression"])
+    items[[length(items) + 1]] <- item
+  }
+
+  result[["status"]]  = getStatusName(allPassed)
+  result[["message"]] = if (allPassed) "All validations passed." else "Some validations failded."
+  result[["items"]] = items
+
+  jsonlite::toJSON(result, auto_unbox=TRUE)
+}
+
+# Executes the validation
+rules <- parseExpressions(payload)
+
+if (is.null(rules)) {
+  result <- list("status" = "ERROR", "message" = "Missing or invlid validation expressions.")
+} else if (is.null(data)) {
+  result <- list("status" = "ERROR", "message" = "No data is avialable.")
 } else {
-  result <- list('status' = 'PASSED',  'message' = sprintf("Validation test %s passed!", rulesValues))
+  summaryData <- generateSummary(rules, data)
+  result = processSummary(summaryData[["summary"]])
 }
