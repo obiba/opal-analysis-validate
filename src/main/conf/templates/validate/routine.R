@@ -49,7 +49,7 @@ processSummary <- function(summaryList) {
   allPassed = TRUE
 
   for(summaryItem in 1:nrow(summaryList)) {
-    passed = summaryList[summaryItem, "fails"] < 1
+    passed = summaryList[summaryItem, "fails"] < 1 && !summaryList[summaryItem, "error"]
     allPassed = allPassed & passed
     item <- list('status' = getStatusName(passed), 'message' = summaryList[summaryItem, "expression"])
     items[[length(items) + 1]] <- item
