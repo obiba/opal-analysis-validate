@@ -45,7 +45,6 @@ gsub("\\|x", "|", x)
 ## Errors
 
 ``` {r echo=FALSE, results="asis"}
-errorList <- errors(summaryData[["confront"]])
 if (length(errorList) > 0) {
   gsub("\\|x", "|", kable(unlist(errorList)))
 } else {

@@ -62,6 +62,25 @@ processSummary <- function(summaryList) {
   jsonlite::toJSON(result, auto_unbox=TRUE)
 }
 
+
+getErrors <- function(confrontData) {
+  # Iterates through errors and create an array of error messages
+  #
+  # Args:
+  #   confrontData
+  #
+  # Returns:
+  #   Result array of errors
+
+  result = c()
+  errorList <- errors(confrontData)
+  for(errorItem in errorList) {
+    result <- c(result, errorItem[[1]])
+  }
+
+  result
+}
+
 # Executes the validation
 rules <- parseExpressions(payload)
 
@@ -72,4 +91,5 @@ if (is.null(rules)) {
 } else {
   summaryData <- generateSummary(rules, data)
   result = processSummary(summaryData[["summary"]])
+  errorList <- getErrors(summaryData[["confront"]])
 }
