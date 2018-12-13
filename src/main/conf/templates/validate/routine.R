@@ -56,7 +56,7 @@ processSummary <- function(summaryList) {
   }
 
   result[["status"]]  = getStatusName(allPassed)
-  result[["message"]] = if (allPassed) "All validations passed." else "Some validations failded."
+  result[["message"]] = if (allPassed) "All validations passed." else "Some validations failed."
   result[["items"]] = items
 
   jsonlite::toJSON(result, auto_unbox=TRUE)
