@@ -29,8 +29,8 @@ public class ValidateAnalysisROperation extends AbstractROperationWithResult {
     ensurePackage("validate");
     eval("library(validate)");
     JSONObject parameters = analysis.getParameters();
-    eval(String.format("base::assign(\"data\", %s)", analysis.getSymbol()), false);
-    eval(String.format("base::assign(\"payload\", %s)", parametersToRListStringRepresentation(parameters)), false);
+    eval(String.format("is.null(base::assign(\"data\", %s))", analysis.getSymbol()), false);
+    eval(String.format("is.null(base::assign(\"payload\", %s))", parametersToRListStringRepresentation(parameters)), false);
     eval(String.format("rmarkdown::render('report.Rmd')"));
 
     log.debug("Executing analysis for {}", analysis);
