@@ -8,10 +8,17 @@
       "key": "expressions",
       "title": "Validation expression",
       "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "minItems": 1
+      "minItems": 1,
+      "items": [
+        {
+          "key": "rule",
+          "type": "string"
+        },
+        {
+          "key": "name",
+          "type": "string"
+        }
+      ]
     }
   ],
   "required": [

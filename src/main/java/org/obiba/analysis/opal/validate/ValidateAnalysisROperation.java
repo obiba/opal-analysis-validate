@@ -2,12 +2,14 @@ package org.obiba.analysis.opal.validate;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.obiba.opal.spi.analysis.AnalysisReportType;
 import org.obiba.opal.spi.r.AbstractROperationWithResult;
 import org.obiba.opal.spi.r.analysis.RAnalysis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Strings;
@@ -49,7 +51,29 @@ public class ValidateAnalysisROperation extends AbstractROperationWithResult {
 
   private String jsonToRConverter(Object object) {
     if (object instanceof JSONArray) {
-      return String.format("c(%s)", removeBracesForArrayString(((JSONArray) object).toString()));
+      JSONArray array = (JSONArray) object;
+      Object firstArrayItem = array.get(0);
+      if (!(firstArrayItem instanceof JSONObject))
+        return String.format("c(%s)", removeBracesForArrayString(array.toString()));
+      else {
+        Set<String> keySet = ((JSONObject) firstArrayItem).keySet();
+        Map<String, JSONArray> map = new HashMap<>();
+
+        keySet.forEach(key -> map.put(key, new JSONArray()));
+
+        int length = array.length();
+        for (int i = 0; i < length; i++) {
+          JSONObject arrayItem = (JSONObject) array.get(i);
+          arrayItem.keySet().forEach(key -> map.get(key).put(arrayItem.get(key)));
+        }
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("data.frame(");
+        keySet.forEach(key -> builder.append(String.format("%s=c(%s), ", key, removeBracesForArrayString(map.get(key).toString()))));
+        builder.append("stringsAsFactors=FALSE)");
+
+        return builder.toString();
+      }
     }
 
     return removeBracesForArrayString(object.toString());
