@@ -29,8 +29,7 @@ generateSummary <- function(rules, data) {
   # Returns:
   #   Summary
 
-  df <- data.frame(rule=rules)
-  v <- validator(.data=df)
+  v <- validator(.data=rules)
   c <- confront(data, v)
   list("summary" = summary(c), "confront" = c)
 }
