@@ -11,11 +11,11 @@
       "minItems": 1,
       "items": [
         {
-          "key": "rule",
+          "key": "name",
           "type": "string"
         },
         {
-          "key": "name",
+          "key": "rule",
           "type": "string"
         }
       ]
