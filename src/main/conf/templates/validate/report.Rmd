@@ -35,6 +35,12 @@ barplot(summaryData[["confront"]], main="")
 kable(summaryData[["summary"]])
 ```
 
+## Validator Rules
+
+``` {r echo=FALSE}
+kable(rules)
+```
+
 ## Errors
 
 ``` {r echo=FALSE, results="asis"}

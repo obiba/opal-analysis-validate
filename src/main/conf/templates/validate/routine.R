@@ -15,8 +15,10 @@ parseExpressions <- function(payload) {
   # Returns:
   #   Array of rules
 
-  if (!is.null(payload) & !is.null(payload$expressions)) {
-    rules <- payload$expressions
+  if (!is.null(payload)) {
+    parsed <- jsonlite::fromJSON(payload, simplifyMatrix = FALSE)
+    rules <- parsed$expressions
+    if (is.data.frame(rules)) rules else data.frame(rule=rules)
   }
 }
 
