@@ -85,10 +85,12 @@ getErrors <- function(confrontData) {
 # Executes the validation
 rules <- parseExpressions(payload)
 
+result <- NULL
+errorList <- NULL
 if (is.null(rules)) {
   result <- list("status" = "ERROR", "message" = "Missing or invlid validation expressions.")
 } else if (is.null(data)) {
-  result <- list("status" = "ERROR", "message" = "No data is avialable.")
+  result <- list("status" = "ERROR", "message" = "No data is available.")
 } else {
   summaryData <- generateSummary(rules, data)
   result = processSummary(summaryData[["summary"]])

@@ -18,7 +18,11 @@ public class ValidateAnalysisROperation extends AbstractROperationWithResult {
   @Override
   protected void doWithConnection() {
     ensurePackage("validate");
-    eval("library(validate)");
+    ensurePackage("rlang");
+    ensurePackage("jsonlite");
+    ensurePackage("knitr");
+    ensurePackage("knitrBootstrap");
+    ensurePackage("rmarkdown");
     String parametersAsString = analysis.getParameters().toString().replaceAll("\"", "\\\\\"");
     eval(String.format("is.null(base::assign(\"data\", %s))", analysis.getSymbol()), false);
     eval(String.format("is.null(base::assign(\"payload\", \"%s\"))", parametersAsString, false));
