@@ -33,7 +33,7 @@ generateSummary <- function(rules, data) {
 
   v <- validator(.data=rules)
   c <- confront(data, v)
-  list("summary" = summary(c), "confront" = c)
+  list(summary = summary(c), "confront" = c)
 }
 
 processSummary <- function(summaryList) {
@@ -52,7 +52,7 @@ processSummary <- function(summaryList) {
   for(summaryItem in 1:nrow(summaryList)) {
     passed = summaryList[summaryItem, "fails"] < 1 && !summaryList[summaryItem, "error"]
     allPassed = allPassed & passed
-    item <- list('status' = getStatusName(passed), 'message' = summaryList[summaryItem, "expression"])
+    item <- list(status = getStatusName(passed), message = summaryList[summaryItem, "expression"])
     items[[length(items) + 1]] <- item
   }
 
@@ -88,9 +88,9 @@ rules <- parseExpressions(payload)
 result <- NULL
 errorList <- NULL
 if (is.null(rules)) {
-  result <- list("status" = "ERROR", "message" = "Missing or invlid validation expressions.")
+  result <- list(status = "ERROR", message = "Missing or invlid validation expressions.")
 } else if (is.null(data)) {
-  result <- list("status" = "ERROR", "message" = "No data is available.")
+  result <- list(status = "ERROR", message = "No data is available.")
 } else {
   summaryData <- generateSummary(rules, data)
   result = processSummary(summaryData[["summary"]])
