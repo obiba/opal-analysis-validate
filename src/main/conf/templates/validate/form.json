@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "title": "Validate",
+  "title": "Validation",
   "description": "The [validate](https://www.rdocumentation.org/packages/validate) package is intended to make checking your data easy, maintainable and reproducible.",
   "type": "array",
   "items": [
