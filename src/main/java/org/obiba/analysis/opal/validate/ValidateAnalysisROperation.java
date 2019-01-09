@@ -24,6 +24,7 @@ public class ValidateAnalysisROperation extends AbstractROperationWithResult {
     ensurePackage("knitrBootstrap");
     ensurePackage("rmarkdown");
     String parametersAsString = analysis.getParameters().toString().replaceAll("\"", "\\\\\"");
+    eval(String.format("is.null(base::assign(\"metadata\", \"%s\"))", getMetadata(analysis).replaceAll("\"", "\\\\\"")), false);
     eval(String.format("is.null(base::assign(\"data\", %s))", analysis.getSymbol()), false);
     eval(String.format("is.null(base::assign(\"payload\", \"%s\"))", parametersAsString, false));
     eval(String.format("rmarkdown::render('report.Rmd')"));
