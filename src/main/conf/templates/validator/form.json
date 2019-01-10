@@ -1,12 +1,12 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "title": "Validation",
-  "description": "The [validate](https://www.rdocumentation.org/packages/validate) package is intended to make checking your data easy, maintainable and reproducible.",
+  "title": "Validator",
+  "description": "Apply data validation rules. Validating data is all about checking whether a data set meets presumptions or expectations you have about it. Based on the [validate](https://www.rdocumentation.org/packages/validate) R package which is intended to make checking your data easy, maintainable and reproducible.",
   "type": "array",
   "items": [
     {
       "key": "expressions",
-      "title": "Validation expression",
+      "title": "Validation expressions",
       "description": "A list of validation expressions. See [validation syntax documentation](https://www.rdocumentation.org/packages/validate/versions/0.2.6/topics/syntax).",
       "type": "array",
       "minItems": 1,

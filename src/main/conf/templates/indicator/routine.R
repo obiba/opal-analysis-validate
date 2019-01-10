@@ -31,9 +31,9 @@ generateSummary <- function(rules, data) {
   # Returns:
   #   Summary
 
-  v <- validator(.data=rules)
-  c <- confront(data, v)
-  list(summary = summary(c), "confront" = c)
+  i <- indicator(.data=rules)
+  c <- confront(data, i)
+  list(summary = summary(c), confront = c)
 }
 
 processSummary <- function(summaryList) {
@@ -47,18 +47,18 @@ processSummary <- function(summaryList) {
 
   result <- list()
   items <- list()
-  allPassed = TRUE
+  allPassed <- TRUE
 
   for(summaryItem in 1:nrow(summaryList)) {
-    passed = summaryList[summaryItem, "fails"] < 1 && !summaryList[summaryItem, "error"]
-    allPassed = allPassed & passed
+    passed <- !summaryList[summaryItem, "error"]
+    allPassed <- allPassed & passed
     item <- list(status = getStatusName(passed), message = summaryList[summaryItem, "expression"])
     items[[length(items) + 1]] <- item
   }
 
-  result[["status"]]  = getStatusName(allPassed)
-  result[["message"]] = if (allPassed) "All validations passed." else "Some validations failed."
-  result[["items"]] = items
+  result[["status"]] <- getStatusName(allPassed)
+  result[["message"]] <- if (allPassed) "All validations passed." else "Some validations failed."
+  result[["items"]] <- items
 
   jsonlite::toJSON(result, auto_unbox=TRUE)
 }
@@ -88,11 +88,11 @@ rules <- parseExpressions(payload)
 result <- NULL
 errorList <- NULL
 if (is.null(rules)) {
-  result <- list(status = "ERROR", message = "Missing or invlid validation expressions.")
+  result <- list(status = "ERROR", message = "Missing or invalid indicator expressions.")
 } else if (is.null(data)) {
   result <- list(status = "ERROR", message = "No data is available.")
 } else {
   summaryData <- generateSummary(rules, data)
-  result = processSummary(summaryData[["summary"]])
+  result <- processSummary(summaryData[["summary"]])
   errorList <- getErrors(summaryData[["confront"]])
 }
