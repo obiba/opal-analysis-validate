@@ -1,5 +1,5 @@
 ---
-title: "Opal Validate Analysis Plugin"
+title: "Validators"
 output:
   knitrBootstrap::bootstrap_document:
     menu: FALSE

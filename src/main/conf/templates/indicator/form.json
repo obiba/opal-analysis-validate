@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Indicator",
+  "description": "Apply data quality indicators. An 'indicator' is a rule or function that takes as input a data set and outputs a number. Indicators are usually designed to be easily interpretable by domain experts and therefore depend strongly on the application. Based on the [validate](https://www.rdocumentation.org/packages/validate) R package which is intended to make checking your data easy, maintainable and reproducible.",
+  "type": "array",
+  "items": [
+    {
+      "key": "expressions",
+      "title": "Indicator expressions",
+      "description": "A list of indicator expressions. See [indicator syntax documentation](https://www.rdocumentation.org/packages/validate/versions/0.2.6/topics/syntax).",
+      "type": "array",
+      "minItems": 1,
+      "items": [
+        {
+          "key": "name",
+          "type": "string",
+          "title": "Name",
+          "description": "Label to identify the expression"
+        },
+        {
+          "key": "rule",
+          "type": "string",
+          "title": "Rule",
+          "description": "Rule expression"
+        }
+      ]
+    }
+  ],
+  "required": [
+    "expressions"
+  ]
+}
