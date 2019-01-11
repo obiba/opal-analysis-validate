@@ -1,0 +1,5 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Categories validator",
+  "description": "Automatically apply data validation rules on categorical variables to verify that all values are described by a category. Based on the [validate](https://www.rdocumentation.org/packages/validate) R package which is intended to make checking your data easy, maintainable and reproducible.",
+}
