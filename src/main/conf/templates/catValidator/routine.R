@@ -6,11 +6,8 @@ getStatusName <- function(status) {
   if (status) 'PASSED' else 'FAILED'
 }
 
-parseExpressions <- function(payload) {
-  # Parses the payload to extract validation rule expressions
-  #
-  # Args:
-  #   payload
+generateExpressions <- function() {
+  # Parses the data dictionary to build the validation rule expressions
   #
   # Returns:
   #   Array of rules
@@ -118,7 +115,7 @@ getErrors <- function(confrontData) {
 }
 
 # Executes the validation
-rules <- parseExpressions(payload)
+rules <- generateExpressions()
 metadata <- parseMetadata(metadata)
 
 result <- NULL
