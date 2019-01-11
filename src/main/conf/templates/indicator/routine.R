@@ -22,6 +22,28 @@ parseExpressions <- function(payload) {
   }
 }
 
+parseMetadata <- function(jsonMetadata) {
+  # Parses the metadata for the report's overview
+  #
+  # Args:
+  #   jsonMetadata
+  #
+  # Returns:
+  #   Array of metadata info
+
+  parsed <- jsonlite::fromJSON(jsonMetadata, simplifyMatrix = FALSE)
+
+  variableLabel <- " variables"
+  variableCount <- "all"
+
+  if (parsed$variableCount > 0) {
+    if (parsed$variableCount == 1) variableLabel <- " variable"
+    variableCount <- toString(parsed$variableCount)
+  }
+
+  parsed <- c(parsed, variableInfo=sprintf("%s%s",  variableCount, variableLabel))
+}
+
 generateSummary <- function(rules, data) {
   # Generates the summary using input rules
   #
@@ -73,7 +95,7 @@ getErrors <- function(confrontData) {
   # Returns:
   #   Result array of errors
 
-  result = c()
+  result <- c()
   errorList <- errors(confrontData)
   for(errorItem in errorList) {
     result <- c(result, errorItem[[1]])
@@ -84,6 +106,7 @@ getErrors <- function(confrontData) {
 
 # Executes the validation
 rules <- parseExpressions(payload)
+metadata <- parseMetadata(metadata)
 
 result <- NULL
 errorList <- NULL
