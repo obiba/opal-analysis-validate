@@ -14,7 +14,7 @@
 
     <junit.version>4.12</junit.version>
 
-    <opal.version>2.13-SNAPSHOT</opal.version>
+    <opal.version>2.13.0</opal.version>
 
     <!-- maven plugins -->
     <github-release-plugin.version>1.2.0</github-release-plugin.version>
