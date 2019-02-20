@@ -23,6 +23,9 @@ public class ValidateAnalysisROperation extends AbstractROperationWithResult {
     ensurePackage("knitr");
     ensurePackage("knitrBootstrap");
     ensurePackage("rmarkdown");
+
+    ensureGitHubPackage("maelstrom-research", "maelstromrmd", "master");
+
     String parametersAsString = analysis.getParameters().toString().replaceAll("\"", "\\\\\"");
     eval(String.format("is.null(base::assign(\"metadata\", \"%s\"))", getMetadata(analysis).replaceAll("\"", "\\\\\"")), false);
     eval(String.format("is.null(base::assign(\"data\", %s))", analysis.getSymbol()), false);
