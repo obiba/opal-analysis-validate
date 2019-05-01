@@ -15,7 +15,7 @@ generateExpressions <- function() {
   rule <- c()
   name <- c()
   for (var in names(data)) {
-    if ("labelled" %in% class(data[[var]])) {
+    if ("labelled" %in% class(data[[var]]) || "haven_labelled" %in% class(data[[var]])) {
       expr <- NULL
       lbls <- as.character(attr(data[[var]], "labels"))
       if (is.numeric(data[[var]])) {
