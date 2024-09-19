@@ -35,7 +35,7 @@ Analysis routine ``r metadata$name`` was executed on table ``r metadata$table`` 
 ## Summary Barplot {data-icon="fa-signal"}
 
 ``` {r echo=FALSE, bootstrap.thumbnail.size="col-xs-12", fig.width=12}
-barplot(summaryData[["confront"]], main="")
+plot(summaryData[["confront"]], main="")
 ```
 
 ## Summary Table
