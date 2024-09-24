@@ -8,12 +8,12 @@
   <url>http://obiba.org</url>
 
   <properties>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <maven.compiler.source>21</maven.compiler.source>
 
     <junit.version>4.13.1</junit.version>
 
-    <opal.version>4.0.0</opal.version>
+    <opal.version>5.0-SNAPSHOT</opal.version>
 
     <!-- maven plugins -->
     <github-release-plugin.version>1.2.0</github-release-plugin.version>
